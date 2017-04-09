@@ -31,7 +31,7 @@ RUN curl -fSL "https://downloads.sourceforge.net/project/boost/boost/${BOOST_VER
     && tar -xjf boost.tar.bz2 -C "$dir" \
     && rm boost.tar.bz2* \
     && cd "$dir" \
-    && echo "using gcc : 5.4 : /usr/local/bin/g++-5.4 ; " >> tools/build/src/user-config.jam
+    && echo "using gcc : 5.4 : /usr/local/bin/g++-5.4 ; " >> tools/build/src/user-config.jam \
     && ./bootstrap.sh --prefix=/usr/local \
     && ./b2 -a \
     && ./b2 install \
