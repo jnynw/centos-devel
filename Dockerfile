@@ -27,13 +27,12 @@ RUN echo '/usr/local/lib64' > /etc/ld.so.conf.d/local-lib64.conf \
 ENV BOOST_VERSION 1.63.0
 RUN curl -fSL "https://downloads.sourceforge.net/project/boost/boost/${BOOST_VERSION}/boost_${BOOST_VERSION//./_}.tar.bz2?r=https%3A%2F%2Fsourceforge.net%2Fprojects%2Fboost%2Ffiles%2Fboost%2F${BOOST_VERSION}%2F&ts=$(date +%s)&use_mirror=nchc" -o boost.tar.bz2 \
     && dir="$(mktemp -d)" \
-    && tar -xjf boost.tar.bz2 -C "$dir" \
+    && tar -xjf boost.tar.bz2 -C "$dir" --strip-components=1 \
     && rm boost.tar.bz2* \
     && cd "$dir" \
-    && echo "using gcc : 5.4 : /usr/local/bin/g++-5.4 ; " >> tools/build/src/user-config.jam \
+    && echo "using gcc : : /usr/local/bin/gcc ; " >> tools/build/src/user-config.jam \
     && ./bootstrap.sh --prefix=/usr/local \
-    && ./b2 -a -j"$(nproc)"\
-    && ./b2 install \
+    && (./b2 -a -j"$(nproc)" install || true) \
     && cd .. \
     && rm -rf "$dir"
 
@@ -49,7 +48,7 @@ RUN curl -fSL "https://cmake.org/files/v3.7/cmake-${CMAKE_VERSION}.tar.gz" -o cm
     && cd .. \
     && rm -rf "$dir"
 
-RUN yum -y install openssl-devel zlib-devel libtool automake python-devel
+RUN yum -y install openssl-devel zlib-devel libtool automake python-devel texinfo
 
 ENV GDB_VERSION 7.12.1
 RUN curl -fSL "http://ftpmirror.gnu.org/gdb/gdb-$GDB_VERSION.tar.gz" -o gdb.tar.gz \
