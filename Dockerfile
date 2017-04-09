@@ -2,7 +2,7 @@ FROM centos:7
 
 ENV GCC_VERSION 5.4.0
 
-RUN yum update && yum -y upgrade && yum -y install gcc make bzip2 wget
+RUN yum update && yum -y upgrade && yum -y install gcc gcc-c++ make bzip2 wget
 RUN set -x \
     && curl -fSL "http://ftpmirror.gnu.org/gcc/gcc-$GCC_VERSION/gcc-$GCC_VERSION.tar.bz2" -o gcc.tar.bz2 \
     && mkdir -p /usr/src/gcc \
