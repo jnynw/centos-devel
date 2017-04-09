@@ -2,7 +2,7 @@ FROM centos:7
 
 ENV GCC_VERSION 5.4.0
 
-RUN yum update && yum -y upgrade && yum -y install wget gcc make
+RUN yum update && yum -y upgrade && yum -y install gcc make bzip2
 RUN set -x \
     && curl -fSL "http://ftpmirror.gnu.org/gcc/gcc-$GCC_VERSION/gcc-$GCC_VERSION.tar.bz2" -o gcc.tar.bz2 \
     && mkdir -p /usr/src/gcc \
@@ -23,4 +23,17 @@ RUN set -x \
 
 RUN echo '/usr/local/lib64' > /etc/ld.so.conf.d/local-lib64.conf \
     && ldconfig -v
+
+ENV BOOST_VERSION 1.63.0
+
+RUN curl -fSL "https://downloads.sourceforge.net/project/boost/boost/${BOOST_VERSION}/boost_${BOOST_VERSION//./_}.tar.bz2?r=https%3A%2F%2Fsourceforge.net%2Fprojects%2Fboost%2Ffiles%2Fboost%2F${BOOST_VERSION}%2F&ts=$(date +%s)&use_mirror=nchc" -o boost.tar.bz2 \
+    && dir="$(mktemp -d)" \
+    && tar --bzip2 -xf boost.tar.bz2 -C "$dir" \
+    && rm boost.tar.bz2* \
+    && cd "$dir" \
+    && ./bootstrap.sh --prefix=/usr/local \
+    && ./b2 -a \
+    && ./b2 install \
+    && cd .. \
+    && rm -rf "$dir"
 
