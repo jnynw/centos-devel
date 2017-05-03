@@ -1,6 +1,6 @@
 FROM centos:7
 
-RUN yum update && yum -y upgrade && yum -y install gcc gcc-c++ make bzip2 wget
+RUN yum update && yum -y upgrade && yum -y install gcc gcc-c++ make bzip2 wget curl rsync which patch net-tools git
 
 ENV GCC_VERSION 5.4.0
 RUN set -x \
